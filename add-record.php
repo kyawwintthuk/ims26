@@ -19,6 +19,18 @@ if (isset($_GET['id'])) {
         // echo $sql1;
         $result = $conn->query($sql1);
         $record = $result->fetch_assoc();
+
+        $stmt = $conn->prepare("SELECT url_id, url_value FROM record_url WHERE record_id = ?");
+        $stmt->bind_param("i", $record['id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $existing_urls = [];
+        while ($row = $result->fetch_assoc()) {
+            $existing_urls[] = $row;
+        }
+        $stmt->close();
+
     } else if ($status == 2) {
         $sql2 = "SELECT * FROM `category` WHERE id=" . $id;
         // echo $sql2;
@@ -43,8 +55,8 @@ if (isset($_GET['id'])) {
                                 <input type="radio" name="operation" id="operation_category" value="Category" <?= ($isEdit) ? ($status == 1) ? 'disabled unchecked' : 'checked' : '' ?>>
                                 <label for="operation_category" <?= ($isEdit && $status == 1) ? 'style="color: #bcbcbc;"' : '' ?>>Category</label>
 
-                                <input type="radio" name="operation" id="operation_location" value="Location" <?= ($isEdit) ? ($status == 1 || $status == 2) ? 'disabled unchecked' : 'checked' : '' ?>>
-                                <label for="operation_location" <?= ($isEdit && ($status == 1 || $status == 2)) ? 'style="color: #bcbcbc;"' : '' ?>>Location</label>
+                                <input type="radio" name="operation" id="operation_url" value="URL" <?= ($isEdit) ? ($status == 1 || $status == 2) ? 'disabled unchecked' : 'checked' : '' ?>>
+                                <label for="operation_url" <?= ($isEdit && ($status == 1 || $status == 2)) ? 'style="color: #bcbcbc;"' : '' ?>>URL</label>
                             </div>
                         </h1>
                         <?php
@@ -59,11 +71,14 @@ if (isset($_GET['id'])) {
                         ?>
                     </div>
                     <div class="card-body">
-                        <div id="image-container" style="width: 189px;" class="for-record-block">
-                            <img src="images/default_image.png">
+                        <div class="form-group mb-3 input-div display">
+                            <div id="image-container" style="width: 189px;">
+                                <img src="images/default_image.png">
+                            </div>
                         </div>
+                       
                         <div id="data_item">
-                            <div class="form-group mb-3 input-div for-record-block">
+                            <div class="form-group mb-3 input-div display">
                                 <select name="category" id="category" style="float: left;">
                                     <?php
                                     foreach ($conn->query("SELECT * FROM `category`") as $row) { ?>
@@ -81,23 +96,60 @@ if (isset($_GET['id'])) {
                                 <input type="text" id="description" name="description" placeholder=" " class="input form-control" <?= ($isEdit) ? ($status == 1) ? 'value="' . $record['description'] . '"' : 'value="' . $category['description'] . '"' : '' ?>>
                                 <label id="label" for="description">Description</label>
                             </div>     
-                            <div class="form-group mb-3 input-wrap input-div for-record-block">
+                            
+                            <div id="urlContainer" class="display">
+                                <?php if (!empty($existing_urls)): ?>
+                                    <?php foreach ($existing_urls as $index => $url): ?>
+                                        <div class="form-group mb-3 input-wrap input-div url-group" data-index="<?= $index + 1 ?>">                                
+                                            <select name="url_id[]" id="url_1" class="url_option" >
+                                                <?php
+                                                foreach ($conn->query("SELECT * FROM `url`") as $row) { ?>
+                                                    <option value="<?= $row['id'] ?>" <?= $url['url_id'] == 1 ? 'selected' : '' ?>><?= $row['name'] ?></option>
+                                                <?php } ?>
+                                            </select>
+                                            <input type="text" id="url_1" name="url_value[]" placeholder=" " value="<?= htmlspecialchars($url['url_value']) ?>" class="input form-control">
+                                            <label id="label" class="url_label">URL</label> 
+                                            <button type="button" class="btn btn-danger btn-sm remove-url" style="<?= $index == 0 ? 'display:none;  width: 10%;' : 'width: 10%;' ?>">×</button>
+                                        </div> 
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="form-group mb-3 input-wrap input-div url-group" data-index="1">                                
+                                        <select name="url_id[]" id="url_1" class="url_option" >
+                                            <?php
+                                            foreach ($conn->query("SELECT * FROM `url`") as $row) { ?>
+                                                <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <input type="text" id="url_1" name="url_value[]" placeholder=" " class="input form-control">
+                                        <label id="label" class="url_label">URL</label> 
+                                        <button type="button" class="btn btn-danger btn-sm remove-url" style="float: right; display: none; width: 10%;">×</button>
+                                    </div> 
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="form-group mb-3 input-wrap input-div display">
+                                <button type="button" name="add_url" class="btn btn-info font-style" id="addUrlBtn" style="float: right; color: #fff; width:100%;">+</button>  
+                                <br>
+                            </div>                            
+                            
+                            
+                            <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="image_url" name="image_url" placeholder=" " class="input form-control" <?= ($isEdit && $status == 1) ? 'value="' . $record['image_url'] . '"' : '' ?>>
                                 <label id="label" for="image_url">Image URL</label>
-                            </div>   
-                            <div class="form-group mb-3 input-wrap input-div for-record-block">
+                            </div>    
+                            <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="google_sheet_url" name="google_sheet_url" placeholder=" " class="input form-control" <?= ($isEdit && $status == 1) ? 'value="' . $record['google_sheet_url'] . '"' : '' ?> autofocus>
                                 <label id="label" for="google_sheet_url">Google Sheet URL</label>
                             </div>    
-                            <div class="form-group mb-3 input-wrap input-div for-record-block">
+                            <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="linkedin_url" name="linkedin_url" placeholder=" " class="input form-control" <?= ($isEdit && $status == 1) ? 'value="' . $record['linkedin_url'] . '"' : '' ?> autofocus>
                                 <label id="label" for="linkedin_url">LinkedIn URL</label>
                             </div>             
-                            <div class="form-group mb-3 input-wrap input-div for-record-block">
+                            <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="gmail_url" name="gmail_url" placeholder=" " class="input form-control" <?= ($isEdit && $status == 1) ? 'value="' . $record['gmail_url'] . '"' : '' ?>>
                                 <label id="label" for="gmail_url">Gmail URL</label>
                             </div>
-                            <div class="form-group mb-3 input-wrap input-div for-record-block">
+                            <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="date" name="date" placeholder=" " class="input form-control" value="<?= date('d-m-Y') ?>" <?= ($isEdit && $status == 1) ? 'value="' . $record['date'] . '"' : '' ?> required>
                                 <label id="label" for="date">Date</label>
                             </div>                                                                                                              
@@ -171,24 +223,66 @@ if (isset($_GET['id'])) {
             });
             $('#image-container').empty().append(img);
         });
+
+        var urlCounter = 1;
+        $('#addUrlBtn').click(function() {
+            urlCounter++;
+            
+            // Clone the first group
+            var $newGroup = $('.url-group:first').clone();
+            
+            // Update IDs and names
+            $newGroup.attr('data-index', urlCounter);
+            $newGroup.find('select')
+                // .attr('name', 'url_' + urlCounter)
+                .attr('id', 'url_' + urlCounter);
+            $newGroup.find('input[type="text"]')
+                // .attr('name', 'url_' + urlCounter)
+                .attr('id', 'url_' + urlCounter)
+                .val(''); // Clear the value
+            
+            // Show remove button (except for first one)
+            $newGroup.find('.remove-url').show();
+            
+            // Append to container
+            $('#urlContainer').append($newGroup);
+            
+            // Show remove button on first group if there are multiple
+            // if ($('.url-group').length > 1) {
+            //     $('.url-group:first .remove-url').show();
+            // }
+        });
+
+        $(document).on('click', '.remove-url', function() {
+            if ($('.url-group').length > 1) {
+                $(this).closest('.url-group').remove();
+                
+                // Hide remove button on first if only one left
+                if ($('.url-group').length === 1) {
+                    $('.url-group:first .remove-url').hide();
+                }
+            } else {
+                alert('Cannot remove the last URL field');
+            }
+        });
                                 
     });
 
-    function radioButton(value) {
+    function radioButton(value) {        
         // var value = $('input[name=operation]:checked').val();
-        if (value == 'record') {
-            $('.for-record-block').css('display', 'block');
-            $('.for-category-block').css('display', 'none');
+        if (value == 'Record') {
+            $('.display').css('cssText', 'display: block !important;');
+            // $('.for-category-block').css('display', 'none');
         }
 
         if (value == 'Category') {
-            $('.for-record-block').css('display', 'none');
-            $('.for-category-block').css('display', 'block');
+           $('.display').css('cssText', 'display: none !important;');
+            // $('.for-category-block').css('display', 'block');
         }
 
-        if (value == 'Location') {
-            $('.for-record-block').css('display', 'none');
-            $('.for-category-block').css('display', 'none');
+        if (value == 'URL') {
+           $('.display').css('cssText', 'display: none !important;');
+            // $('.for-category-block').css('display', 'none');
         }
     }
 </script>

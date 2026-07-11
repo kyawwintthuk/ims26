@@ -136,6 +136,9 @@
         top: 60px;
         right: -48px;
     } */
+    .url_label{
+        left: 272px;
+    }
 
     .price {
         top: 116px;
@@ -253,6 +256,7 @@
 
     .input-wrap {
         position: relative;
+        display: flex !important;
     }
 
     input:focus+#label,
@@ -289,6 +293,10 @@
         top: 22px;
         right: -28px;
     } */
+
+    .url_label{
+        left: 120px;
+    }
 
     .price {
         top: 51px;
@@ -403,6 +411,7 @@
 
     .input-wrap {
         position: relative;
+        display: flex !important;
     }
 
     input:focus+#label,
