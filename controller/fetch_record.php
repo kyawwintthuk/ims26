@@ -36,16 +36,16 @@ foreach ($conn->query($sql1) as $row) {
                 <div class="row">
     ';
 
-    $sql3 = "SELECT id, name, description , image_url, google_sheet_url, linkedin_url, gmail_url, date FROM `record` WHERE category_id = " . $row['id'] . "";
+    $sql3 = "SELECT id, name, description, date FROM `record` WHERE category_id = " . $row['id'] . "";
 
     foreach ($conn->query($sql3) as $row) {      
 
         // 20230803 Thursday -- not available add -- KWT 
-        if(!empty($row['image_url'])):
-            $image_url = $row['image_url'];
-        else:
-            $image_url = 'images/not_available.jpg ';
-        endif;
+        // if(!empty($row['image_url'])):
+        //     $image_url = $row['image_url'];
+        // else:
+        //     $image_url = 'images/not_available.jpg ';
+        // endif;
         
 
         $output .= '            
@@ -55,12 +55,20 @@ foreach ($conn->query($sql1) as $row) {
                         <div class="card-header" style="border:none; padding: 0px;">                                                                                                        
                         </div>
                         <div class="card-body" style="padding: 5px 0px;">
-                            <span> ' . substr($row['name'], 0, 40) . '...' . '</span>';
-        $output .=   ($row['description'] != null) ? '<br><span> ' . substr($row['description'], 0, 30) . '...' . '</span>' : '';
-        $output .=   ($row['image_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['image_url'].'\')" target="_blank" value="Image">' : '';
-        $output .=   ($row['google_sheet_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['google_sheet_url'].'\')" target="_blank" value="Google Sheet">' : '';
-        $output .=   ($row['linkedin_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['linkedin_url'].'\')" target="_blank" value="LinkedIn">' : '';
-        $output .=   ($row['gmail_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['gmail_url'].'\')" target="_blank" value="Gmail">' : '';
+                            <span> ' . $row['name'] . '</span>';
+        
+        $output .=   ($row['description'] != null) ? '<br><span> ' . substr($row['description'], 0, 100) . '...' . '</span>' : '';
+
+        $sql4 = "SELECT u.name, ru.url_id, ru.url_value FROM `url` u, `record_url` ru WHERE u.id = ru.url_id AND ru.record_id=". $row['id'];
+        // echo $sql4;
+        foreach ($conn->query($sql4) as $row1) { 
+            $output .=   ($row1['url_value'] != null) ? '<input type="button" onclick="window.open(\''.$row1['url_value'].'\')" target="_blank" value="'.$row1['name'].'">' : '';
+        }
+
+        // $output .=   ($row['image_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['image_url'].'\')" target="_blank" value="Image">' : '';
+        // $output .=   ($row['google_sheet_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['google_sheet_url'].'\')" target="_blank" value="Google Sheet">' : '';
+        // $output .=   ($row['linkedin_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['linkedin_url'].'\')" target="_blank" value="LinkedIn">' : '';
+        // $output .=   ($row['gmail_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['gmail_url'].'\')" target="_blank" value="Gmail">' : '';
 
  
         $output .= ' </div>

@@ -7,10 +7,10 @@ $operation = $_POST['operation'];
 $category = $_POST['category'];
 $name = $_POST['name'];
 $description = $_POST['description'];
-$image_url = $_POST['image_url'];
-$google_sheet_url = $_POST['google_sheet_url'];
-$linkedin_url = $_POST['linkedin_url'];
-$gmail_url = $_POST['gmail_url'];
+// $image_url = $_POST['image_url'];
+// $google_sheet_url = $_POST['google_sheet_url'];
+// $linkedin_url = $_POST['linkedin_url'];
+// $gmail_url = $_POST['gmail_url'];
 $date = date('Y-m-d', strtotime($_POST['date']));
 
 $url_ids = $_POST['url_id'] ?? [];
@@ -43,8 +43,8 @@ $sys_date = date('Y-m-d');
 if (isset($_POST['add'])) {
     if ($operation == 'Record') {
         $sql = "
-            INSERT INTO `record`(`name`, `description`, `image_url`, `google_sheet_url` ,`linkedin_url`, `gmail_url`, `category_id`, `date`, `sys_date`) 
-            VALUES ('$name','$description', '$image_url', '$google_sheet_url', '$linkedin_url', '$gmail_url', '$category', '$date', '$date');
+            INSERT INTO `record`(`name`, `description`,  `category_id`, `date`, `sys_date`) 
+            VALUES ('$name','$description', '$category', '$date', '$date');
         ";
     }
 
@@ -103,7 +103,7 @@ if (isset($_POST['add'])) {
 
 if (isset($_POST['edit'])) {    
     if ($operation == 'Record') {
-        $sql = "UPDATE `record` SET `name` = '$name', `description`= '$description', `image_url`= '$image_url', `google_sheet_url`= '$google_sheet_url', `linkedin_url`= '$linkedin_url',`gmail_url`= '$gmail_url', `category_id`= '$category', `date`= '$date' WHERE id = " . $id . ";";        
+        $sql = "UPDATE `record` SET `name` = '$name', `description`= '$description',`category_id`= '$category', `date`= '$date' WHERE id = " . $id . ";";        
     }
 
     if ($operation == 'Category') {

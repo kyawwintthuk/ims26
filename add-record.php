@@ -128,12 +128,11 @@ if (isset($_GET['id'])) {
                             </div>
 
                             <div class="form-group mb-3 input-wrap input-div display">
-                                <button type="button" name="add_url" class="btn btn-info font-style" id="addUrlBtn" style="float: right; color: #fff; width:100%;">+</button>  
-                                <br>
+                                <button type="button" name="add_url" class="btn btn-info font-style" id="addUrlBtn" style="float: right; color: #fff; width:100%;">+</button>                                  
                             </div>                            
+                            <br><br>
                             
-                            
-                            <div class="form-group mb-3 input-wrap input-div display">
+                            <!-- <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="image_url" name="image_url" placeholder=" " class="input form-control" <?= ($isEdit && $status == 1) ? 'value="' . $record['image_url'] . '"' : '' ?>>
                                 <label id="label" for="image_url">Image URL</label>
                             </div>    
@@ -148,7 +147,7 @@ if (isset($_GET['id'])) {
                             <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="gmail_url" name="gmail_url" placeholder=" " class="input form-control" <?= ($isEdit && $status == 1) ? 'value="' . $record['gmail_url'] . '"' : '' ?>>
                                 <label id="label" for="gmail_url">Gmail URL</label>
-                            </div>
+                            </div> -->
                             <div class="form-group mb-3 input-wrap input-div display">
                                 <input type="text" id="date" name="date" placeholder=" " class="input form-control" value="<?= date('d-m-Y') ?>" <?= ($isEdit && $status == 1) ? 'value="' . $record['date'] . '"' : '' ?> required>
                                 <label id="label" for="date">Date</label>
