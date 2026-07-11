@@ -146,7 +146,7 @@ if (isset($_POST['edit'])) {
         }
 
         $_SESSION['color'] = "#ccffd1"; //success        
-        header('Location: ../add-record.php');
+        header('Location: ../index.php');
     } else {
         $_SESSION['color'] = "#f98686";  //error
         $_SESSION['message'] = "Error:" . $sql . "<br>" . $conn->error;

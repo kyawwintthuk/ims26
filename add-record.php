@@ -104,7 +104,7 @@ if (isset($_GET['id'])) {
                                             <select name="url_id[]" id="url_1" class="url_option" >
                                                 <?php
                                                 foreach ($conn->query("SELECT * FROM `url`") as $row) { ?>
-                                                    <option value="<?= $row['id'] ?>" <?= $url['url_id'] == 1 ? 'selected' : '' ?>><?= $row['name'] ?></option>
+                                                    <option value="<?= $row['id'] ?>" <?= $url['url_id'] == $row['id'] ? 'selected' : '' ?>><?= $row['name'] ?></option>
                                                 <?php } ?>
                                             </select>
                                             <input type="text" id="url_1" name="url_value[]" placeholder=" " value="<?= htmlspecialchars($url['url_value']) ?>" class="input form-control">
