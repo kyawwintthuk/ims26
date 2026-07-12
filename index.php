@@ -21,7 +21,7 @@ if ($res->num_rows > 0) {
 <div class="container container-expand">
     <div style="background-color: #e9fdff; margin-bottom: 24px;">
     <!-- 20230724 Monday KWT 15:16 PM start -->
-        <input type="radio" name="category" id="all" style="margin: 0px;" value="0"  checked="true">
+        <input type="radio" name="category" id="all" style="margin: 0px;" value="0"  <?= ('All' == $select_option) ? 'checked' : '' ?> >
         <label for="all" style="padding-right: 7px;" class="font-style">All</label>
         <?php
         $sql = "SELECT * FROM `category`";

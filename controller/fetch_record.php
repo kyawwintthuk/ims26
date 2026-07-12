@@ -12,7 +12,7 @@ $output = '';
 //   20230724 Monday KWT 15:16 PM  -- start 
 $category_id = $_GET['category_id'];
 
-if($category_id == ''){
+if($category_id == 0){
     $sql1 = "SELECT id, name, description FROM `category`";
 }else{
     $sql1 = "SELECT id, name, description FROM `category` WHERE id = " . $category_id . "";

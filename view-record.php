@@ -47,17 +47,17 @@ if (isset($_GET['id'])) {
             <div class="card">
                 <div class="form-group mb-3 input-div">
                     <h4><?= $record['name']?></h4> 
-                    [ <?= $record['date']?> ]
+                    <span class="general-font">[ <?= $record['date']?> ]</span>
                 </div>
 
                 <div class="form-group mb-3 input-div">
                     <?php foreach ($existing_urls as $index => $url): ?>                        
-                        <?= '<input type="button" onclick="window.open(\''.$url['url_value'].'\')" target="_blank" value="'.$url['name'].'">' ?>                         
+                        <?= '<input type="button" class="general-font" onclick="window.open(\''.$url['url_value'].'\')" target="_blank" value="'.$url['name'].'">' ?>
                     <?php endforeach; ?>
                 </div>
 
                 <div class="form-group mb-3 input-div">
-                    <?= $record['description']?>
+                    <span class="general-font"><?= $record['description']?></span>
                 </div>
                                                           
             </div>
