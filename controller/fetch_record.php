@@ -49,7 +49,7 @@ foreach ($conn->query($sql1) as $row) {
         
 
         $output .= '            
-            <div class="record col-md-12" data-id="' . $row['id'] . '">
+            <div class="record col-md-12" data-id="' . $row['id'] . '" onclick="location=\'view-record.php?id=' . $row['id'] . '.1\'" >
                 <div class="row">
                     <div class="card" style="border:none; padding: 0px;">
                         <div class="card-header" style="border:none; padding: 0px;">                                                                                                        

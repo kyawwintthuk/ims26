@@ -126,6 +126,11 @@
 #panel-2 {
     display: none;
 }
+
+h4 {
+    background-color: #b8d9ff;
+}
+
 /*  Tabbed Panels end -- 20230629 Thursday -- */
 /* ---------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------- */
@@ -253,14 +258,16 @@
     top: 10px;
     left: 18px; */
     }
-
+        
     .input-wrap {
         position: relative;
         display: flex !important;
     }
 
     input:focus+#label,
-    input:not(:placeholder-shown)+#label {
+    input:not(:placeholder-shown)+#label,
+    textarea:focus+#label,
+    textarea:not(:placeholder-shown)+#label  {
         color: rgb(137 137 137);
         font-weight: bold;
         font-size: 30px;
@@ -415,7 +422,9 @@
     }
 
     input:focus+#label,
-    input:not(:placeholder-shown)+#label {
+    input:not(:placeholder-shown)+#label,
+    textarea:focus+#label,
+    textarea:not(:placeholder-shown)+#label  {
         color: rgb(137 137 137);
         font-weight: bold;
         font-size: 15px;

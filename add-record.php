@@ -71,11 +71,11 @@ if (isset($_GET['id'])) {
                         ?>
                     </div>
                     <div class="card-body">
-                        <div class="form-group mb-3 input-div display">
+                        <!-- <div class="form-group mb-3 input-div display">
                             <div id="image-container" style="width: 189px;">
                                 <img src="images/default_image.png">
                             </div>
-                        </div>
+                        </div> -->
                        
                         <div id="data_item">
                             <div class="form-group mb-3 input-div display">
@@ -92,8 +92,8 @@ if (isset($_GET['id'])) {
                                 <input type="text" id="name" name="name" placeholder=" " class="input form-control" <?= ($isEdit) ? ($status == 1) ?  'value="' . $record['name'] . '"' : 'value="' . $category['name'] . '"' : '' ?> autofocus required>
                                 <label id="label" for="name">Name</label>
                             </div>
-                            <div class="form-group mb-3 input-wrap input-div">
-                                <input type="text" id="description" name="description" placeholder=" " class="input form-control" <?= ($isEdit) ? ($status == 1) ? 'value="' . $record['description'] . '"' : 'value="' . $category['description'] . '"' : '' ?>>
+                            <div class="form-group mb-3 input-wrap input-div">                                
+                                <textarea id="description" name="description" placeholder=" " class="input form-control" rows="5"><?= ($isEdit) ? ($status == 1) ?  $record['description'] : $category['description']  : '' ?></textarea>
                                 <label id="label" for="description">Description</label>
                             </div>     
                             
