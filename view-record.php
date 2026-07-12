@@ -57,7 +57,7 @@ if (isset($_GET['id'])) {
                 </div>
 
                 <div class="form-group mb-3 input-div">
-                    <span class="general-font"><?= $record['description']?></span>
+                    <span class="general-font"><?= nl2br(htmlspecialchars($record['description'])) ?></span>
                 </div>
                                                           
             </div>
