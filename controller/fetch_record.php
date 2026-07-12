@@ -62,7 +62,7 @@ foreach ($conn->query($sql1) as $row) {
         $sql4 = "SELECT u.name, ru.url_id, ru.url_value FROM `url` u, `record_url` ru WHERE u.id = ru.url_id AND ru.record_id=". $row['id'];
         // echo $sql4;
         foreach ($conn->query($sql4) as $row1) { 
-            $output .=   ($row1['url_value'] != null) ? '<input type="button" onclick="window.open(\''.$row1['url_value'].'\')" target="_blank" value="'.$row1['name'].'">' : '';
+            $output .=   ($row1['url_value'] != null) ? '<input type="button" onclick="event.stopPropagation(); window.open(\''.$row1['url_value'].'\')" target="_blank" value="'.$row1['name'].'">' : '';
         }
 
         // $output .=   ($row['image_url'] != null) ? '<input type="button" onclick="window.open(\''.$row['image_url'].'\')" target="_blank" value="Image">' : '';
