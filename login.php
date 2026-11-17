@@ -14,7 +14,7 @@ $server_ip = $_SERVER['SERVER_ADDR'];
 if($server_ip === '127.0.0.1' || $server_ip === '::1'){
   $title = 'localhost';
 }else{
-  $title = 'BTS 22';
+  $title = 'IMS 26';
 }
 
 $monthsColorsCode = $conn->query("SELECT option2 FROM `master` WHERE type='MonthsColors' AND option1='".date('m')."'")->fetch_assoc()['option2'];
@@ -42,7 +42,7 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
 </head>
 
 <!-- <body oncontextmenu="return false" style="background-color: #f7f7f7;"> -->
-<body style="background-color: #03363a;">
+<body style="background-color: #f7f7f7;">
     <section class="vh-100" style="height: 90vh!important;">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
