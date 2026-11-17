@@ -14,7 +14,7 @@ $server_ip = $_SERVER['SERVER_ADDR'];
 if($server_ip === '127.0.0.1' || $server_ip === '::1'){
   $title = 'localhost';
 }else{
-  $title = 'IMS 26';
+  $title = 'BTS 22';
 }
 
 $monthsColorsCode = $conn->query("SELECT option2 FROM `master` WHERE type='MonthsColors' AND option1='".date('m')."'")->fetch_assoc()['option2'];
@@ -27,10 +27,6 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
     <meta charset="utf-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- CSS CDN -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" /> -->
-    <!-- datetimepicker jQuery CDN -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"> -->
     </script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery-ui.js"></script>
@@ -46,7 +42,7 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
 </head>
 
 <!-- <body oncontextmenu="return false" style="background-color: #f7f7f7;"> -->
-<body style="background-color: #f7f7f7;">
+<body style="background-color: #03363a;">
     <section class="vh-100" style="height: 90vh!important;">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -54,60 +50,18 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
                     <div class="card shadow-2-strong" style="border-radius: 1rem;">
                         <div class="card-body p-5 text-center">
 
-                            <h1 class="mb-5" <?= $monthsColorsCodeCSS ?>>IMS 26</h1>
-                            <div class="panel">
-                                <div class="table-bordered table-responsive text-center">
-
-                                    <table class="table table-bordered" style="border: 1px solid #ddd !important;">
-                                        <tbody>
-                                            <?php
-                                            for ($i = 1; $i <= 4; $i++) {
-                                            ?>
-                                                <tr style="background-color: #e7e4e4;">
-                                                    <?php
-                                                    for ($j = 1; $j <= 4; $j++) {
-                                                    ?>
-                                                        <td <?= 'id="code-' . $id . '"' ?> style="background-color: #fff; border: 4px solid #afacac;"><?= rand(0, 9); ?></td>
-                                                    <?php
-                                                        $id++;
-                                                    }
-                                                    ?>
-                                                </tr>
-                                            <?php }  ?>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                            <div class="panel">
-                                <div class="table-bordered table-responsive text-center">
-
-                                    <table class="table table-bordered" style="border: 1px solid #ddd !important;">
-                                        <tbody>
-                                            <?php
-                                            for ($i = 1; $i <= 4; $i++) {
-                                            ?>
-                                                <tr style="background-color: #e7e4e4;">
-                                                    <?php
-                                                    for ($j = 1; $j <= 4; $j++) {
-                                                    ?>
-                                                        <td <?= 'id="code-' . $id . '"' ?> style="background-color: #fff; border: 4px solid #afacac;"><?= rand(0, 9); ?></td>
-                                                    <?php
-                                                        $id++;
-                                                    }
-                                                    ?>
-                                                </tr>
-                                            <?php }  ?>
-                                        </tbody>
-                                    </table>
-
-                                </div>
+                            <h1 class="mb-5" <?= $monthsColorsCodeCSS ?>>IMS 26</h1>                                                         
+                            <div class="form-group mb-3 input-wrap" style="padding-bottom:20px;">
+                                <input type="text" id="username" name="username" placeholder=" " class="form-control" value="ims26" >
+                                <label id="label" for="username" style="color: #877d7d;">Username</label>
                             </div>
 
-                            <div class="form-outline mb-4">
-                                <input type="password" id="password" class="form-control form-control-lg" placeholder="●●●●●●●●●" autofocus />
+                            <div class="form-group mb-3 input-wrap">
+                                <input type="password" id="password" name="password" placeholder="●●●●●●●●●" class="form-control" autofocus>
+                                <label id="label" for="password" style="color: #877d7d;">Password</label>
                             </div>
-
+                            <br>
+                         
 
 
                             <!-- Checkbox -->
@@ -129,30 +83,6 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
 
 </html>
 <script>
-    // $(window).on("load", function() {
-    //     fetch_ip_list();
-        
-    //     function fetch_ip_list() {
-    //         $.ajax({
-    //             url: 'fetch_ip_list.php',
-    //             type: 'POST',
-    //             data: {
-    //                 ip_address: <?php echo json_encode($_SERVER['REMOTE_ADDR']) ?>,
-    //                 device_name: <?php echo json_encode($_SERVER['HTTP_USER_AGENT']) ?>
-    //             }
-    //             ,
-    //             success: function(data) {
-    //                 if(data == '403'){
-    //                     window.location.href = '403.php';
-    //                 }
-    //             }
-    //         });
-    //     }
-    //     setInterval(function() {
-    //         fetch_ip_list();
-    //     }, 1000); // it will refresh your data every 1 sec
-    // });
-
     $(document).on('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
             // alert("You can't print!");
@@ -163,31 +93,6 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
         }
     });
 
-    // https://stackoverflow.com/questions/28690564/is-it-possible-to-remove-inspect-element
-    // Right Click
-    // F12
-    // Ctrl + Shift + I
-    // Ctrl + Shift + J
-    // Ctrl + Shift + C
-    // Ctrl + U
-    // document.onkeydown = function(e) {
-    //     if (event.keyCode == 123) {
-    //         return false;
-    //     }
-    //     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-    //         return false;
-    //     }
-    //     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-    //         return false;
-    //     }
-    //     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-    //         return false;
-    //     }
-    //     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-    //         return false;
-    //     }
-    // }
-
     if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
         $.ajax({
             url: "destroy_session.php",
@@ -195,29 +100,33 @@ $monthsColorsCodeCSS = "style='color: $monthsColorsCode;'";
         });
     }
 
-    $i = 1;
-    $code = '';
-    while ($i <= 32) {
-        $code += $('#code-' + $i).text();
-        $i++;
-    }
-    // console.log($code);
-
-    $('#password').keyup(function() {
+    $('#username, #password').on('input', function() {
         $.ajax({
             url: "controller/fetch_login.php",
             method: "POST",
             data: {
-                password: $('#password').val(),
-                code: $code
+                username: $('#username').val(),
+                password: $(this).val()
             },
             success: function(data) {
-                // console.log(data);
-                if (data == "success") {
-                    window.location.href = 'index.php';
+                var response = data.trim();
+                if (response.indexOf('success:') === 0) {
+                    var redirectUrl = response.split(':')[1];
+                    window.location.href = redirectUrl;
+                }else{
+                    $('.card-body').css('border-left', '10px solid #ff0000');
+                }                 
+            },
+            error: function(xhr) {
+                // If PHP redirects, this might be triggered
+                // because the AJAX request is redirected
+                if (xhr.status === 0 || xhr.status === 200) {
+                    // The redirect might have happened
+                    // No action needed - browser will follow redirect
+                    return;
                 }
+                $('.card-body').css('border-left', '10px solid #ff0000');              
             }
         });
-
     });
 </script>

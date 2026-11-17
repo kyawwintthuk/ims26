@@ -1,20 +1,20 @@
 <?php
     session_start();
     include('../db/config.php');
+    $username = $_POST['username'];
     $password = $_POST['password'];
-    $code = $_POST['code'];
+    // $code = $_POST['code'];
 
-    $sql = "SELECT password FROM users WHERE role ='admin'";
-    // echo $sql;
-    $stmt = $conn->prepare($sql);
-    // $stmt->bind_param("s", $email);
+    // $sql = "SELECT password FROM users WHERE role ='admin'";
+    $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
+    $stmt->close();
 
-    if($password == substr($code,0,2).substr($code,14,-16).substr($code,-4,-3).substr($code,-7,-6).substr($code,-10,-9).substr($code,-13,-12) || 
-    ($user && password_verify($password, $user['password']))){
+    if($user && password_verify($password, $user['password'])){
         $_SESSION['login'] = 'success';
-        echo 'success';
+        echo 'success:index.php';
     }
 ?>
