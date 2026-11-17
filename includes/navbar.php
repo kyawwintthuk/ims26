@@ -23,6 +23,12 @@
           <a class="nav-link" href="db_export.php">[DB]</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="http://bts22.rf.gd/">[BTS-22]</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://pms23.rf.gd/">[PMS-23]</a>
+        </li>      
+        <!-- <li class="nav-item">
           <a class="nav-link" href="index.php">Page2</a>
         </li>
         <li class="nav-item">
@@ -30,7 +36,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="index.php">Page4</a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
