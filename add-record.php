@@ -20,6 +20,12 @@ if (isset($_GET['id'])) {
         $result = $conn->query($sql1);
         $record = $result->fetch_assoc();
 
+        $sql2 = $conn->prepare("SELECT * FROM record_file WHERE record_id = ?");
+        $sql2->bind_param("i", $record['id']);
+        $sql2->execute();
+        $result = $sql2->get_result();
+        $record2 = $result->fetch_assoc();
+
         $stmt = $conn->prepare("SELECT url_id, url_value FROM record_url WHERE record_id = ?");
         $stmt->bind_param("i", $record['id']);
         $stmt->execute();
@@ -45,7 +51,7 @@ if (isset($_GET['id'])) {
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <form action="controller/add_record.php" method="POST">
+                <form action="controller/add_record.php" method="POST" enctype="multipart/form-data">
                     <div class="card-header" id="status" <?= (isset($_SESSION['color'])) ? 'style="background-color: ' . $_SESSION['color'] . '"' : '' ?>>
                         <h1>
                             <div class="add_radio_buttons">
@@ -95,8 +101,12 @@ if (isset($_GET['id'])) {
                             <div class="form-group mb-3 input-wrap input-div">                                
                                 <textarea id="description" name="description" placeholder=" " class="input form-control" rows="5"><?= ($isEdit) ? ($status == 1) ?  $record['description'] : $category['description']  : '' ?></textarea>
                                 <label id="label" for="description">Description</label>
-                            </div>     
-                            
+                            </div>
+                            <div class="form-group mb-3 input-wrap input-div">                                
+                                <input type="file" name="fileToUpload" id="fileToUpload">
+                                <?= ($isEdit && $status == 1) ? htmlspecialchars($record2['file_name'] ?? '')  : '' ?>
+                            </div>
+
                             <div id="urlContainer" class="display">
                                 <?php if (!empty($existing_urls)): ?>
                                     <?php foreach ($existing_urls as $index => $url): ?>

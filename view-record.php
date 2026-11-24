@@ -20,6 +20,12 @@ if (isset($_GET['id'])) {
         $result = $conn->query($sql1);
         $record = $result->fetch_assoc();
 
+        $sql2 = $conn->prepare("SELECT * FROM record_file WHERE record_id = ?");
+        $sql2->bind_param("i", $record['id']);
+        $sql2->execute();
+        $result = $sql2->get_result();
+        $record2 = $result->fetch_assoc();
+
         $stmt = $conn->prepare("SELECT u.name, ru.url_id, ru.url_value FROM record_url ru, url u WHERE u.id=ru.url_id AND ru.record_id = ?");
         $stmt->bind_param("i", $record['id']);
         $stmt->execute();
@@ -49,6 +55,12 @@ if (isset($_GET['id'])) {
                     <h4><?= $record['name']?></h4> 
                     <span class="general-font">[ <?= $record['date']?> ]</span>
                 </div>
+
+                <?php if (!empty($record2['file_name'])): ?>
+                    <a href="./controller/uploads/<?= urlencode($record2['file_name']) ?>" download>
+                        <?= htmlspecialchars($record2['file_name']) ?>
+                    </a>
+                <?php endif; ?>                    
 
                 <div class="form-group mb-3 input-div">
                     <?php foreach ($existing_urls as $index => $url): ?>                        

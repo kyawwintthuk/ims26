@@ -7,6 +7,12 @@ $operation = $_POST['operation'];
 $category = $_POST['category'];
 $name = $_POST['name'];
 $description = $_POST['description'];
+
+$target_dir = __DIR__ . "/uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
 // $image_url = $_POST['image_url'];
 // $google_sheet_url = $_POST['google_sheet_url'];
 // $linkedin_url = $_POST['linkedin_url'];
@@ -66,7 +72,19 @@ if (isset($_POST['add'])) {
     $record_id = $conn->insert_id;
     
     if ($result == TRUE) {
-           // Check if there's data
+        if(isset($_FILES["fileToUpload"])){
+            // $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+            // if(file_exists($target_file)){
+            //     $_SESSION['radio_button']  = $operation;
+            //     $_SESSION['message'] = "Error: File already exits.";          
+            // }else{
+            move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+            $stmt = $conn->prepare("INSERT INTO record_file (record_id, file_name, file_size, sys_date) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("isis", $record_id, $_FILES["fileToUpload"]["name"], $_FILES["fileToUpload"]["size"], $sys_date);
+            $stmt->execute();
+            // }       
+        }  
+        // Check if there's data
         if (!empty($url_ids) && !empty($url_values)) {
             // Loop through each URL
             foreach ($url_ids as $index => $url_id) {
@@ -118,6 +136,13 @@ if (isset($_POST['edit'])) {
         
         // Start transaction
         $conn->begin_transaction();
+
+        if(isset($_FILES["fileToUpload"])){         
+            move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+            $stmt = $conn->prepare("INSERT INTO record_file (record_id, file_name, file_size, sys_date) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("isis", $id, $_FILES["fileToUpload"]["name"], $_FILES["fileToUpload"]["size"], $sys_date);
+            $stmt->execute();                
+        }  
         
         try {
             // Delete ALL existing records for this record_id
@@ -157,17 +182,18 @@ if (isset($_POST['edit'])) {
 }
 
 if (isset($_POST['delete'])) {
-    // if($operation == 'Category'){        
-    //     // echo "SELECT COUNT(*) AS i FROM `record` r INNER JOIN `category` c  ON r.category_id = c.id WHERE r.id = ". $id;        
-    //     $row = $conn->query("SELECT COUNT(*) AS i FROM `category` c INNER JOIN `record` r  ON c.id = r.category_id WHERE c.id = ". $id)->fetch_assoc();        
-    //     if($row['i'] > 0){
-    //         $_SESSION['color'] = "#f98686";  //error
-    //         $_SESSION['message'] = "You cannot delete this category because there are some records assigned to it. 
-    //         Please remove all records from this category before deleting it.";
-    //         header('Location: ../add-record.php?id='.$id.'.2');
-    //         return; //Stop code execution
-    //     }    
-    // }
+    // die($operation);
+    if($operation == 'Category'){        
+        // echo "SELECT COUNT(*) AS i FROM `record` r INNER JOIN `category` c  ON r.category_id = c.id WHERE r.id = ". $id;        
+        $row = $conn->query("SELECT COUNT(*) AS i FROM `category` c INNER JOIN `record` r  ON c.id = r.category_id WHERE c.id = ". $id)->fetch_assoc();
+        if($row['i'] > 0){
+            $_SESSION['color'] = "#f98686";  //error
+            $_SESSION['message'] = "You cannot delete this category because there are some records assigned to it. 
+            Please remove all records from this category before deleting it.";
+            header('Location: ../add-record.php?id='.$id.'.2');
+            return; //Stop code execution
+        }    
+    }
 
     // if($operation == 'Record'){
     //     $row = $conn->query("SELECT COUNT(*) AS i FROM `consume` WHERE record_id = ".$id)->fetch_assoc();
@@ -179,17 +205,46 @@ if (isset($_POST['delete'])) {
     //         return; //Stop code execution
     //     }
     // }
+    $stmt = $conn->prepare(
+        "SELECT rf.file_name
+        FROM `record` r
+        INNER JOIN `record_file` rf ON r.id = rf.record_id
+        WHERE r.id = ?"
+    );
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    $stmt->close();    
+    if ($row && !empty($row['file_name'])) {
+        $path = __DIR__ . '/uploads/' . basename($row['file_name']);        
+        if (is_file($path)) {
+            unlink($path);            
+        }
+    }        
 
-    $sql = "DELETE FROM `" . $operation . "` WHERE id = " . $id;
-    // die($sql);
-    $result = $conn->query($sql);
-    if ($result == TRUE) {        
+    $table_name = strtolower($operation);
+    $stmt = $conn->prepare("DELETE FROM `$table_name` WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $result = $stmt->execute();
+    $stmt->close();
+    // $result = TRUE;
+    $stmt = $conn->prepare("DELETE FROM record_file WHERE record_id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->close();
+
+    $stmt = $conn->prepare("DELETE FROM record_url WHERE record_id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->close();
+
+    if ($result == TRUE) {       
         $_SESSION['color'] = "#ccffd1"; //success
         header('Location: ../index.php');
     } else {
         $_SESSION['color'] = "#f98686";  //error
         $_SESSION['message'] = "Error:" . $sql . "<br>" . $conn->error;
-        header('Location: add.php');
+        header('Location: ../add-record.php?id='.$id.'.1');
     }
 }
 
