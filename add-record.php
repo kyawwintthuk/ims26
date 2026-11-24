@@ -6,6 +6,14 @@ session_start();
 
 $isEdit = false;
 
+$res = $conn->query("SELECT value FROM `setting` WHERE id = 1");
+if ($res->num_rows > 0) {
+    $select_option = $res->fetch_assoc()['value'];
+} else {
+    $select_option = 'All';
+}
+
+
 if (isset($_GET['id'])) {
     $isEdit = true;
     $value = $_GET['id'];
@@ -88,7 +96,7 @@ if (isset($_GET['id'])) {
                                 <select name="category" id="category" style="float: left;">
                                     <?php
                                     foreach ($conn->query("SELECT * FROM `category`") as $row) { ?>
-                                        <option value="<?= $row['id'] ?>" <?= ($isEdit) ? ($row['id'] == $record['category_id']) ? 'selected' : '' : ''  ?>><?= $row['name'] ?></option>
+                                        <option value="<?= $row['id'] ?>" <?= $isEdit ? (($row['id'] == $record['category_id']) ? 'selected' : '') : (($select_option == $row['name']) ? 'selected' : ''  )?>><?= $row['name'] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -102,7 +110,7 @@ if (isset($_GET['id'])) {
                                 <textarea id="description" name="description" placeholder=" " class="input form-control" rows="5"><?= ($isEdit) ? ($status == 1) ?  $record['description'] : $category['description']  : '' ?></textarea>
                                 <label id="label" for="description">Description</label>
                             </div>
-                            <div class="form-group mb-3 input-wrap input-div">                                
+                            <div class="form-group mb-3 input-wrap input-div display" >                                
                                 <input type="file" name="fileToUpload" id="fileToUpload">
                                 <?= ($isEdit && $status == 1) ? htmlspecialchars($record2['file_name'] ?? '')  : '' ?>
                             </div>
